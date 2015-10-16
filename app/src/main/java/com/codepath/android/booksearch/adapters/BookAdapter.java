@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class BookAdapter extends ArrayAdapter<Book> {
     // View lookup cache
     private static class ViewHolder {
-        public ImageView ivCover;
+     //   public ImageView ivCover;
         public TextView tvTitle;
         public TextView tvAuthor;
     }
@@ -39,7 +39,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_book, parent, false);
-            viewHolder.ivCover = (ImageView)convertView.findViewById(R.id.ivBookCover);
+       //     viewHolder.ivCover = (ImageView)convertView.findViewById(R.id.ivBookCover);
             viewHolder.tvTitle = (TextView)convertView.findViewById(R.id.tvTitle);
             viewHolder.tvAuthor = (TextView)convertView.findViewById(R.id.tvAuthor);
             convertView.setTag(viewHolder);
@@ -49,7 +49,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         // Populate the data into the template view using the data object
         viewHolder.tvTitle.setText(book.getTitle());
         viewHolder.tvAuthor.setText(book.getAuthor());
-        Picasso.with(getContext()).load(Uri.parse(book.getCoverUrl())).error(R.drawable.ic_nocover).into(viewHolder.ivCover);
+    //    Picasso.with(getContext()).load(Uri.parse(book.getCoverUrl())).error(R.drawable.ic_nocover).into(viewHolder.ivCover);
         // Return the completed view to render on screen
         return convertView;
     }

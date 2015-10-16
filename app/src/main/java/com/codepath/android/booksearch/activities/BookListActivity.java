@@ -1,5 +1,6 @@
 package com.codepath.android.booksearch.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -26,7 +27,54 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class BookListActivity extends ActionBarActivity {
+
+public class BookListActivity extends Activity {
+    private ListView lvBooks;
+    private BookAdapter bookAdapter;
+
+    private BookClient client;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_list);
+        lvBooks = (ListView) findViewById(R.id.lvBooks);
+        ArrayList<Book> aBooks = new ArrayList<Book>();
+        bookAdapter = new BookAdapter(this, aBooks);
+        lvBooks.setAdapter(bookAdapter);
+        fetchBooks();
+    }
+
+
+    private void fetchBooks() {
+        client = new BookClient();
+        client.getBooks("403", new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    JSONArray docs = null;
+                    if (response != null) {
+                        // Get the docs json array
+                        docs = response.getJSONArray("docs");
+                        // Parse json array into array of model objects
+                        final ArrayList<Book> books = Book.fromJson(docs);
+                        // Remove all books from the adapter
+                        bookAdapter.clear();
+                        // Load model objects into the adapter
+                        for (Book book : books) {
+                            bookAdapter.add(book); // add book through the adapter
+                        }
+                        bookAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    // Invalid JSON format, show appropriate error.
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+}
+/*public class BookListActivity extends ActionBarActivity {
     public static final String BOOK_DETAIL_KEY = "book";
     private ListView lvBooks;
     private BookAdapter bookAdapter;
@@ -142,3 +190,4 @@ public class BookListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+*/
